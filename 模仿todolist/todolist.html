@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>todos</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <section class="todoapp">
+        <div>
+            <header class="header" >
+                <h1>todos</h1>
+                <input class="new-todo" placeholder="请输入内容" v-model="todo" @keyup.enter="addEvent"/>
+            </header>
+            <section class ="main" v-show = "list.length">
+                <input class="toggle-all" type="checkbox" v-model="checkAll" >
+                <ul class="todo-list">
+                    <li v-for="item,index in filterList" :class="{editing:editingId === item.id,completed:item.isSelected}" :index="index">
+                    	<div class="view">
+                    		<input class="toggle" type="checkbox" v-model="item.isSelected"/>
+                            <label @dblclick="editEvent(item,index)">{{ item.title }}</label>
+                            <button class="destroy" @click="delEvent(item.id)"></button>
+                    	</div>
+                    	<input type="text" class="edit" 
+                    		:ref=" 'editInput'+index "
+                    		v-model="item.title"
+                    		@keyup.esc="cancleEdit(item)" 
+                    		@blur="editDone(item)" 
+                    		@keyup.13="editDone(item)" 
+                    		/>
+                    </li>
+                </ul>
+            </section>
+            <footer class="footer" v-show="list.length">
+	            <span class="todo-count">
+	            	<strong>{{unSelLen}}</strong>
+	            	<span>条未选中</span>
+	            </span>
+	            <ul class="filters">
+                    <li><a href="#/all" :class="{selected:hash==='all'}">All</a></li> 
+                    <li><a href="#/active" :class="{selected:hash==='active'}">Active</a></li> 
+                    <li><a href="#/completed" :class="{selected:hash==='completed'}">Completed</a></li>
+				</ul>
+                <button v-show="selLen" class="clear-completed" @click="removeEvent" >
+                    Clear completed
+                </button>
+            </footer>
+        </div>
+    </section>
+    <script src="js/todolist.js"></script>
+</body>
+
+</html>
